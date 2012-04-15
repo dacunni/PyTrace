@@ -49,16 +49,22 @@ class Point(Vector):
 class Ray:
     origin = Point(0.0, 0.0, 0.0)
     direction = Vector(0.0, 0.0, 0.0)
-    def __init__(self, o, d):
-        self.origin = o
-        self.direction = d.normalize()
+    depth = 0
+    def __init__(self, origin, direction, depth):
+        self.origin = origin
+        self.direction = direction.normalize()
+        self.depth = depth
     def __str__(self):
-        return "Ra(%s, %s)" % (self.origin, self.direction)
+        return "Ra(%s, %s, %d)" % (self.origin, self.direction, self.depth)
 
 class Intersection:
     object = None
     distance = 0.0
     normal = Vector(0.0, 0.0, 0.0)
+    position = None
+    origin_ray = None
+    mirror_ray = None
+    radiance_to_origin = None
     def __init__(self, o, d, n):
         self.object = o
         self.distance = d
