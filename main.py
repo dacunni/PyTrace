@@ -14,38 +14,6 @@ from Plane import *
 
 
 
-
-u = Vector(2.0, 0.0, 0.0)
-v = Vector(0.0, 1.0, 0.0)
-p = Point(3.0, 4.0, 5.0)
-s = Sphere( Point(0.0, 0.0, -3.0), 0.5 )
-#r = Ray( Point(0.0, 0.0, 0.0), Vector(0.0, 0.0, -1.0), 0 )
-scene = [ 
-         Sphere( Point(0.0, 0.0, -3.0), 0.5 ),
-         Sphere( Point(1.0, 0.0, -5.0), 0.5 ),
-         Sphere( Point(-1.0, 0.0, -2.0), 0.5 ),
-         Sphere( Point(0.0, 3.0, -10.0), 0.5 ),
-         Sphere( Point(0.0, -1.0, -6.0), 0.5 ),
-         Plane( 0.0, -1.0, 0.0, -10.0 )
-#         Plane( 0.0, 1.0, 0.0, -10.0 ),
-#         Plane( 1.0, 0.0, 0.0, 10.0 ),
-#         Plane( -1.0, 0.0, 0.0, 10.0 )
-        ]
-print "u =", u
-print "v =", v
-print "p =", p
-print "s =", s
-#print "r =", r
-print u, "dot", v, "=", u.dot(v)
-print u, "cross", v, "=", u.cross(v)
-print u, "cross", v, "=", u.cross(v)
-print u, "add", v, "=", u.add(v)
-print u, "subtract", v, "=", u.subtract(v)
-print "magnitude", u, "=", u.magnitude()
-print "normalize", u, "=", u.normalize()
-
-#print "intersectRay:", s.intersectRay(r)
-
 class RadianceSample:
     direction = None
     radiance = 0.0
@@ -62,10 +30,6 @@ class PointLight:
     def sample( self, isect ):
         return RadianceSample( self.position.subtract(isect.position).normalize(), self.power )
 
-lights = [ 
-        PointLight( Point( 8.0, 8.0, -3.0 ), 1.0 )
-# PointLight( Point( 0.0, 0.0, 10.0 ), 1.0 )
-       ]
 
 def shadeIntersection( isect, light ):
     radiance_sample = light.sample( isect )
@@ -80,13 +44,6 @@ def shadeIntersectionMulti( isect, lights ):
     return value
 
 ########
-
-print "Ray Tracer"
-
-width = 256
-height = 256
-max_depth = 2
-
 
 def findClosestIntersection( ray, scene ):
     isect = None
@@ -126,9 +83,24 @@ def traceRay( ray, scene ):
             isect.radiance_to_origin += specular_coef * mirror_isect.radiance_to_origin
     return isect
 
+# ----------------------------------------------------------------------
+#                           MAIN
+# ----------------------------------------------------------------------
+
+print "Ray Tracer"
+
+width = 256
+height = 256
+max_depth = 2
+
+
 artifacts = RenderArtifacts()
 
 artifacts.createNewOutputImages( width, height )
+
+# Load scene file
+#execfile("scenes/default.scene"); 
+execfile("scenes/grid_spheres.scene"); 
 
 for x in range(width):
     for y in range(height):
